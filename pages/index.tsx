@@ -85,7 +85,10 @@ const Index = () => {
 
   return (
     <div style={{
-      padding: 20
+      marginLeft: 'auto',
+      marginRight: 'auto',
+      maxWidth: '42rem',
+      padding: '2.625rem 1.3125rem',
     }}>
       <div
         className="article-body"
