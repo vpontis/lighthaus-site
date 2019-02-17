@@ -1,9 +1,12 @@
 import React, {useEffect, useState} from 'react'
 import _ from 'lodash';
+import axios from 'axios';
 
-const NUM_GRAPHS = 1000;
+import "../public/index.css"
 
-const getScrollPosition = (): number => {
+const CONTENTS_URL = 'https://cdn.contents.io/teams/lighthaus/collections/blog-posts/items/lighthaus'
+
+const getScrollPosition = () : number => {
   if (typeof window === 'undefined') {
     return 0;
   }
@@ -32,23 +35,63 @@ const useScrollPosition = () => {
   return position
 }
 
-const colors = ['red', 'yellow', 'blue', 'green', 'orange', 'lightgold'];
+const colors = [
+  'red',
+  'yellow',
+  'blue',
+  'green',
+  'orange',
+  'lightgold'
+];
+
+const useContentsData = (url : string) : {
+  isLoading: boolean,
+  contentsData: object | null
+} => {
+  const [isLoading,
+    setIsLoading] = useState(true);
+  const [data,
+    setData] = useState(null);
+
+  const getDataFromContents = async() => {
+    const {data: respData} = await axios.get(url);
+    console.log('fetching data')
+
+    setData(respData);
+    setIsLoading(false);
+  }
+
+  useEffect(() => {
+    getDataFromContents();
+  }, [url]);
+
+  return {isLoading, contentsData: data};
+}
 
 const Index = () => {
   const scrollPosition = useScrollPosition();
+  const {isLoading, contentsData} = useContentsData(CONTENTS_URL);
+
   const colorIndex = Math.round(scrollPosition / 500) % colors.length
   const backgroundColor = colors[colorIndex];
-  console.log(scrollPosition, colorIndex, backgroundColor);
+
+  if (isLoading) {
+    return (
+      <div>Loading...</div>
+    )
+  }
+
+  const {body} = contentsData.properties;
 
   return (
-    <div style={{backgroundColor}}>
-      {_
-        .range(NUM_GRAPHS)
-        .map((i : number) => {
-          return (
-            <p key={i}>Hello Next.js</p>
-          )
-        })}
+    <div style={{
+      padding: 20
+    }}>
+      <div
+        className="article-body"
+        dangerouslySetInnerHTML={{
+        __html: body
+      }}/>
     </div>
   )
 }
