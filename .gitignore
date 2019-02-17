@@ -37,4 +37,8 @@ jspm_packages
 .node_repl_history
 .next
 
+# Deploy static site
+out/
+
+# OS Files
 .DS_Store
