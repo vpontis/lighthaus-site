@@ -413,7 +413,6 @@ a:hover {
 
 .article-body figcaption {
   display: block;
-  color: var(--gray);
   font-size: 0.8em;
   margin-top: 0.5em;
   text-align: center;

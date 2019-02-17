@@ -15,7 +15,7 @@ const getScrollPosition = () : number => {
   return window.pageYOffset;
 }
 
-const SCROLL_THROTTLE_TIME = 100;
+const SCROLL_THROTTLE_TIME = 25;
 
 const useScrollPosition = () => {
   const [position,
@@ -36,13 +36,22 @@ const useScrollPosition = () => {
   return position
 }
 
-const colors = [
-  'red',
-  'yellow',
-  'blue',
-  'green',
-  'orange',
-  'lightgold'
+interface HSLColor {
+  hue : number,
+  saturation : number,
+  lightness : number
+}
+
+const colors : HSLColor[] = [
+  {
+    hue: 0,
+    saturation: 26,
+    lightness: 60
+  }, {
+    hue: 360,
+    saturation: 26,
+    lightness: 60
+  },
 ];
 
 const useContentsData = (url : string) : {
@@ -69,12 +78,26 @@ const useContentsData = (url : string) : {
   return {isLoading, contentsData: data};
 }
 
+const interpolateColors = (color1 : HSLColor, color2 : HSLColor, ratio : number) : HSLColor => {
+  return {
+    hue: color1.hue + (color2.hue - color1.hue) * ratio,
+    saturation: color1.saturation + (color2.saturation - color1.saturation) * ratio,
+    lightness: color1.lightness + (color2.lightness - color1.lightness) * ratio,
+  }
+}
+
 const Index = () => {
   const scrollPosition = useScrollPosition();
   const {isLoading, contentsData} = useContentsData(CONTENTS_URL);
 
-  const colorIndex = Math.round(scrollPosition / 500) % colors.length
-  const backgroundColor = colors[colorIndex];
+  let colorFraction = (scrollPosition / 3000) % 2;
+
+  if (colorFraction > 1) {
+    colorFraction = 2 - colorFraction;
+  } 
+
+  const color : HSLColor = interpolateColors(colors[0], colors[1], colorFraction)
+  console.log(color, scrollPosition, Math.round(colorFraction * 100));
 
   if (isLoading) {
     return (
@@ -87,6 +110,7 @@ const Index = () => {
   return (
     <div
       style={{
+      backgroundColor: `hsla(${color.hue}, ${color.saturation}%, ${color.lightness}%, 0.5)`,
       marginLeft: 'auto',
       marginRight: 'auto',
       maxWidth: '42rem',
