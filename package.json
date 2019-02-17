@@ -15,5 +15,8 @@
     "next": "^8.0.1",
     "react": "^16.8.2",
     "react-dom": "^16.8.2"
+  },
+  "devDependencies": {
+    "@types/next": "^8.0.1"
   }
 }

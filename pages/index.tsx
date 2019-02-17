@@ -3,6 +3,7 @@ import _ from 'lodash';
 import axios from 'axios';
 
 import "../public/index.css"
+import Header from '../lib/Header';
 
 const CONTENTS_URL = 'https://cdn.contents.io/teams/lighthaus/collections/blog-posts/items/lighthaus'
 
@@ -84,12 +85,14 @@ const Index = () => {
   const {body} = contentsData.properties;
 
   return (
-    <div style={{
+    <div
+      style={{
       marginLeft: 'auto',
       marginRight: 'auto',
       maxWidth: '42rem',
-      padding: '2.625rem 1.3125rem',
+      padding: '2.625rem 1.3125rem'
     }}>
+      <Header/>
       <div
         className="article-body"
         dangerouslySetInnerHTML={{
