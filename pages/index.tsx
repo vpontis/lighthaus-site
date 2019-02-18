@@ -51,7 +51,7 @@ const colors : HSLColor[] = [
     hue: 360,
     saturation: 26,
     lightness: 60
-  },
+  }
 ];
 
 const useContentsData = (url : string) : {
@@ -82,7 +82,7 @@ const interpolateColors = (color1 : HSLColor, color2 : HSLColor, ratio : number)
   return {
     hue: color1.hue + (color2.hue - color1.hue) * ratio,
     saturation: color1.saturation + (color2.saturation - color1.saturation) * ratio,
-    lightness: color1.lightness + (color2.lightness - color1.lightness) * ratio,
+    lightness: color1.lightness + (color2.lightness - color1.lightness) * ratio
   }
 }
 
@@ -94,7 +94,7 @@ const Index = () => {
 
   if (colorFraction > 1) {
     colorFraction = 2 - colorFraction;
-  } 
+  }
 
   const color : HSLColor = interpolateColors(colors[0], colors[1], colorFraction)
   console.log(color, scrollPosition, Math.round(colorFraction * 100));
@@ -111,19 +111,24 @@ const Index = () => {
   return (
     <div
       style={{
-      backgroundColor: `hsla(${color.hue}, ${color.saturation}%, ${color.lightness}%, ${alpha})`,
-      marginLeft: 'auto',
-      marginRight: 'auto',
-      maxWidth: '42rem',
-      padding: '2.625rem 1.3125rem'
+      backgroundColor: `hsla(${color.hue}, ${color.saturation}%, ${color.lightness}%, ${alpha})`
     }}>
-      <Header/>
 
+      <Header/>
       <div
-        className="article-body"
-        dangerouslySetInnerHTML={{
-        __html: body
-      }}/>
+        style={{
+        marginLeft: 'auto',
+        marginRight: 'auto',
+        maxWidth: '42rem',
+        padding: '2.625rem 1.3125rem'
+      }}>
+
+        <div
+          className="article-body"
+          dangerouslySetInnerHTML={{
+          __html: body
+        }}/>
+      </div>
     </div>
   )
 }
