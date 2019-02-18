@@ -98,6 +98,7 @@ const Index = () => {
 
   const color : HSLColor = interpolateColors(colors[0], colors[1], colorFraction)
   console.log(color, scrollPosition, Math.round(colorFraction * 100));
+  const alpha = Math.min(scrollPosition / 1000, 0.2);
 
   if (isLoading) {
     return (
@@ -110,13 +111,14 @@ const Index = () => {
   return (
     <div
       style={{
-      backgroundColor: `hsla(${color.hue}, ${color.saturation}%, ${color.lightness}%, 0.5)`,
+      backgroundColor: `hsla(${color.hue}, ${color.saturation}%, ${color.lightness}%, ${alpha})`,
       marginLeft: 'auto',
       marginRight: 'auto',
       maxWidth: '42rem',
       padding: '2.625rem 1.3125rem'
     }}>
       <Header/>
+
       <div
         className="article-body"
         dangerouslySetInnerHTML={{
