@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react'
+import React, { useEffect, useState } from 'react'
 import _ from 'lodash';
 import axios from 'axios';
 
@@ -7,7 +7,7 @@ import Header from '../lib/Header';
 
 const CONTENTS_URL = 'https://cdn.contents.io/teams/lighthaus/collections/blog-posts/items/lighthaus'
 
-const getScrollPosition = () : number => {
+const getScrollPosition = (): number => {
   if (typeof window === 'undefined') {
     return 0;
   }
@@ -26,7 +26,7 @@ const useScrollPosition = () => {
       setPosition(getScrollPosition())
     }, SCROLL_THROTTLE_TIME)
 
-    window.addEventListener('scroll', handleScroll, {passive: true})
+    window.addEventListener('scroll', handleScroll, { passive: true })
 
     return () => {
       window.removeEventListener('scroll', handleScroll)
@@ -37,12 +37,12 @@ const useScrollPosition = () => {
 }
 
 interface HSLColor {
-  hue : number,
-  saturation : number,
-  lightness : number
+  hue: number,
+  saturation: number,
+  lightness: number
 }
 
-const colors : HSLColor[] = [
+const colors: HSLColor[] = [
   {
     hue: 0,
     saturation: 26,
@@ -54,7 +54,7 @@ const colors : HSLColor[] = [
   }
 ];
 
-const useContentsData = (url : string) : {
+const useContentsData = (url: string): {
   isLoading: boolean,
   contentsData: object | null
 } => {
@@ -63,8 +63,8 @@ const useContentsData = (url : string) : {
   const [data,
     setData] = useState(null);
 
-  const getDataFromContents = async() => {
-    const {data: respData} = await axios.get(url);
+  const getDataFromContents = async () => {
+    const { data: respData } = await axios.get(url);
     console.log('fetching data')
 
     setData(respData);
@@ -75,10 +75,10 @@ const useContentsData = (url : string) : {
     getDataFromContents();
   }, [url]);
 
-  return {isLoading, contentsData: data};
+  return { isLoading, contentsData: data };
 }
 
-const interpolateColors = (color1 : HSLColor, color2 : HSLColor, ratio : number) : HSLColor => {
+const interpolateColors = (color1: HSLColor, color2: HSLColor, ratio: number): HSLColor => {
   return {
     hue: color1.hue + (color2.hue - color1.hue) * ratio,
     saturation: color1.saturation + (color2.saturation - color1.saturation) * ratio,
@@ -88,7 +88,7 @@ const interpolateColors = (color1 : HSLColor, color2 : HSLColor, ratio : number)
 
 const Index = () => {
   const scrollPosition = useScrollPosition();
-  const {isLoading, contentsData} = useContentsData(CONTENTS_URL);
+  const { isLoading, contentsData } = useContentsData(CONTENTS_URL);
 
   let colorFraction = (scrollPosition / 3000) % 2;
 
@@ -96,38 +96,50 @@ const Index = () => {
     colorFraction = 2 - colorFraction;
   }
 
-  const color : HSLColor = interpolateColors(colors[0], colors[1], colorFraction)
+  const color: HSLColor = interpolateColors(colors[0], colors[1], colorFraction)
   console.log(color, scrollPosition, Math.round(colorFraction * 100));
   const alpha = Math.min(scrollPosition / 1000, 0.2);
-
-  if (isLoading) {
-    return (
-      <div>Loading...</div>
-    )
-  }
-
-  const {body} = contentsData.properties;
 
   return (
     <div
       style={{
-      backgroundColor: `hsla(${color.hue}, ${color.saturation}%, ${color.lightness}%, ${alpha})`
-    }}>
-
-      <Header/>
+        backgroundColor: `hsla(${color.hue}, ${color.saturation}%, ${color.lightness}%, ${alpha})`
+      }}>
+      <Header />
       <div
         style={{
-        marginLeft: 'auto',
-        marginRight: 'auto',
-        maxWidth: '42rem',
-        padding: '2.625rem 1.3125rem'
-      }}>
-
+          marginLeft: 'auto',
+          marginRight: 'auto',
+          maxWidth: '42rem',
+          padding: '2.625rem 1.3125rem'
+        }}
+      >
         <div
-          className="article-body"
-          dangerouslySetInnerHTML={{
-          __html: body
-        }}/>
+          style={{
+            display: 'flex',
+            justifyContent: 'center',
+          }}
+        >
+          <img
+            style={{
+              width: '100%',
+              maxWidth: 300,
+            }}
+            src='./static/lighthaus-blue.gif'
+          />
+        </div>
+
+        {isLoading ? (
+
+          <div>Loading...</div>
+        ) : (
+            <div
+              className="article-body"
+              dangerouslySetInnerHTML={{
+                __html: contentsData.properties.body
+              }} />
+
+          )}
       </div>
     </div>
   )
