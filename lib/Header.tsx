@@ -12,7 +12,7 @@ const Header = () => (
   <Head>
     <title>Lighthaus</title>
     <meta name="viewport" content="initial-scale=1.0, width=device-width"/>
-    <link rel="shortcut icon" href="/static/favicon.ico"/>
+    <link rel="shortcut icon" href="/static/lighthaus-favicon.png"/>
   </Head>
 )
 
