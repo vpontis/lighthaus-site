@@ -122,8 +122,7 @@ const Index = () => {
         >
           <img
             style={{
-              width: '100%',
-              maxWidth: 300,
+              maxWidth: 400,
             }}
             src='./static/lighthaus-blue.gif'
           />
